@@ -241,12 +241,13 @@ public class ConsoleCombat {
         int handPos;
         int battlePos;
 
-        PossiblePlayers attackers = new PossiblePlayers(playedAttackerUnits, possibleAttackerUnits, 3);
+        PossiblePlayers attackers;
         PossibleMinimaxCombat minimax;
         PlayerAction bestAction;
         Pair<Integer, Integer> actionEvaluation;
 
         while (!battlefield.allUnitsPlayed()) {
+            attackers = new PossiblePlayers(playedAttackerUnits, possibleAttackerUnits, 3);
             minimax = new PossibleMinimaxCombat(defender, attackers, battlefield, true);
             bestAction = minimax.getBestAction();
             actionEvaluation = minimax.getActionEvaluation(bestAction);
