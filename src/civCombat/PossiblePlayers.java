@@ -28,6 +28,8 @@ public class PossiblePlayers {
         if (playedUnits.size() > battleHandSize) {
             throw new IllegalStateException("More units played than hand size");
         }
+        /*Number of units given to each player*/
+        int unitsPerPlayer = battleHandSize - playedUnits.size();
 
         /* Make copies of each PossibleUnit from standingForces */
         List<PossibleUnit> remainingStandingForces = new ArrayList<>();
@@ -40,70 +42,92 @@ public class PossiblePlayers {
             index = 0;
             while (!remainingStandingForces.get(index).getUnitType().equals(u.getUnitType())) {
                 index++;
-                if (index > remainingStandingForces.size() - 1) throw new IllegalArgumentException("Unit matching played unit type not found");
-            }
-            remainingStandingForces.remove(index);            
-        }
-
-        /*Number of units given to each player*/
-        int totalUnits = battleHandSize - playedUnits.size(); //=remainingStandingForces.size()
-
-        /* Select totalUnits from remainingStandingForces to create a PossiblePlayer */
-        int[] selection = new int[battleHandSize];
-        for (int n = 0; n < battleHandSize; n++) {
-            selection[n] = n;
-        }        
-        Set<int[]> selections = new HashSet<>();        
-        selections.add(selection.clone());
-        
-        boolean done = false;
-        while (!done) {
-            selection[battleHandSize - 1]++;
-            for (int i = battleHandSize - 1; i > 0; i--) {
-                if (selection[i] > totalUnits - battleHandSize + i) {
-                    selection[i - 1]++;
-                    for (int j = i; j < battleHandSize; j++) {
-                        selection[j] = selection[j - 1] + 1;
-                    }
+                if (index > remainingStandingForces.size() - 1) {
+                    throw new IllegalArgumentException("Unit matching played unit type not found");
                 }
             }
-            if (selection[0] == totalUnits - battleHandSize + 1) done = true;
-            else selections.add(selection.clone());
+            remainingStandingForces.remove(index);
         }
+        if (remainingStandingForces.size() < unitsPerPlayer) {
+            throw new IllegalStateException("Insufficient number of remaining units");
+        }
+
+        /* Select unitsPerPlayer from remainingStandingForces to create a PossiblePlayer */
+        int unitsAvailable = remainingStandingForces.size();
+        if (unitsAvailable != standingForces.size() - playedUnits.size()) {
+            throw new IllegalStateException("Incorrect number of units available");
+        }
+        Set<int[]> selections = generateSelections(unitsAvailable, unitsPerPlayer);
 
         /*Iterate through all possible combinations of the selected units. 
         Pointers shows the current selection of units; the pointer[i]'th unit
         is selected from remainingStandingForces(selection[i]) for each
         selection in selections */
-        int[] pointers = new int[totalUnits];
+        int[] pointers = new int[unitsPerPlayer];
         Arrays.fill(pointers, 0);
 
-        //Finished when we add a player with the last choice from each PossibleUnit
-        done = false;
-        while (!done) {
-            //Change the first unit
-            pointers[0] += 1;
-            //If we move past the end of our options for a unit, reset to the first option and increment the next one instead
-            for (int i = 0; i < pointers.length; i++) {
-                if (pointers[i] > remainingStandingForces.get(i).numberPossible() - 1) {
-                    pointers[i] = 0;
-                    if (i != pointers.length - 1) {
-                        pointers[i + 1] = pointers[i + 1] + 1;
-                    } else {
-                        done = true;
+        //Array to hold Units for our next player
+        Unit[] units;
+        for (int[] sel : selections) {
+
+            //Finished when we add a player with the last choice from each PossibleUnit
+            boolean done = false;
+            while (!done) {
+                //Change the first unit
+                pointers[0] += 1;
+                //If we move past the end of our options for a unit, reset to the first option and increment the next one instead
+                for (int i = 0; i < pointers.length; i++) {
+                    if (pointers[i] > remainingStandingForces.get(sel[i]).numberPossible() - 1) {
+                        pointers[i] = 0;
+                        if (i != pointers.length - 1) {
+                            pointers[i + 1] = pointers[i + 1] + 1;
+                        } else {
+                            done = true;
+                        }
                     }
                 }
-            }
-            //Create new units for our next players
-            Unit[] units;
-            for (int[] sel : selections) {
-                units = new Unit[totalUnits];
-                for (int i = 0; i < totalUnits; i++) {
+
+                //Create copies of required units
+                units = new Unit[unitsPerPlayer];
+                for (int i = 0; i < unitsPerPlayer; i++) {
                     units[i] = remainingStandingForces.get(sel[i]).getUnit(pointers[i]).copyUnit();
                 }
                 possiblePlayers.add(new Player(units));
+
             }
         }
+    }
+    
+    private Set<int[]> generateSelections(int unitsAvailable, int unitsPerPlayer) {
+        Set<int[]> selections = new HashSet<>();
+        
+
+        if (unitsPerPlayer > 0) {
+            int[] selection = new int[unitsPerPlayer];
+            for (int n = 0; n < unitsPerPlayer; n++) {
+                selection[n] = n;
+            }
+            selections.add(selection.clone());
+
+            boolean done = false;
+            while (!done) {
+                selection[unitsPerPlayer - 1]++;
+                for (int i = unitsPerPlayer - 1; i > 0; i--) {
+                    if (selection[i] > unitsAvailable - unitsPerPlayer + i) {
+                        selection[i - 1]++;
+                        for (int j = i; j < unitsPerPlayer; j++) {
+                            selection[j] = selection[j - 1] + 1;
+                        }
+                    }
+                }
+                if (selection[0] == unitsAvailable - unitsPerPlayer + 1) {
+                    done = true;
+                } else {
+                    selections.add(selection.clone());
+                }
+            }
+        }
+        return selections;
     }
 
     public List<Player> getPlayers() {
