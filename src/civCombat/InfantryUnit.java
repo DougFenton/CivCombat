@@ -40,4 +40,11 @@ public class InfantryUnit extends Unit {
     public String getUnitType() {
         return "Infantry";
     }
+
+    @Override
+    public String toString() {
+        return "Infantry" + super.toString();
+    }
+    
+    
 }
