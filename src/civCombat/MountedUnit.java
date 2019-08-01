@@ -40,4 +40,9 @@ public class MountedUnit extends Unit {
     public String getUnitType() {
         return "Mounted";
     }
+
+    @Override
+    public String toString() {
+        return "Mounted" + super.toString();
+    }
 }
