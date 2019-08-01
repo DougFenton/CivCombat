@@ -6,6 +6,7 @@
 package civCombat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,10 +33,6 @@ public class Battlefield {
     private Unit[] attackerUnits;
     private Unit[] defenderUnits;
 
-    //Number of units killed for each player
-    private int attackerUnitsKilled;
-    private int defenderUnitsKilled;
-
     private void initializePlayerHands(Player attacker, Player defender) {
         this.attackerHand = attacker.getUnitsList();
         this.defenderHand = defender.getUnitsList();
@@ -51,9 +48,6 @@ public class Battlefield {
         //No units played at start, no units killed
         this.attackerUnits = new Unit[battlefieldSize];
         this.defenderUnits = new Unit[battlefieldSize];
-
-        this.attackerUnitsKilled = 0;
-        this.defenderUnitsKilled = 0;
     }
 
     public Battlefield(Battlefield b) {
@@ -96,9 +90,6 @@ public class Battlefield {
             }
         }
         this.defenderUnits = newDefenderUnits;
-
-        this.attackerUnitsKilled = b.attackerUnitsKilled;
-        this.defenderUnitsKilled = b.defenderUnitsKilled;
     }
 
     public Battlefield copyBattlefield() {
@@ -277,14 +268,6 @@ public class Battlefield {
         return defenderHandSize;
     }
 
-    public int getAttackerUnitsKilled() {
-        return attackerUnitsKilled;
-    }
-
-    public int getDefenderUnitsKilled() {
-        return defenderUnitsKilled;
-    }
-
     public boolean allUnitsPlayed() {
         return (attackerHandSize == 0 && defenderHandSize == 0);
     }
@@ -339,7 +322,6 @@ public class Battlefield {
             }
             attacker.removeWounds();
             attackerUnits[battlePosition] = null;
-            attackerUnitsKilled += 1;
         }
         if (defender.isDead()) {
             if (log) {
@@ -348,9 +330,12 @@ public class Battlefield {
                 System.out.println();
             }
             defender.removeWounds();
-            defenderUnits[battlePosition] = null;
-            defenderUnitsKilled += 1;
+            defenderUnits[battlePosition] = null;            
         }
     }
 
+    @Override
+    public String toString() {
+        return "Battlefield{" + "attackerHand=" + attackerHand + ", defenderHand=" + defenderHand + ", battlefieldSize=" + battlefieldSize + ", attackerUnits=" + Arrays.toString(attackerUnits) + ", defenderUnits=" + Arrays.toString(defenderUnits) + '}';
+    }
 }
