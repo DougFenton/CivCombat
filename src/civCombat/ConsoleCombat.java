@@ -251,6 +251,7 @@ public class ConsoleCombat {
             minimax = new PossibleMinimaxCombat(defender, attackers, battlefield, true);
             bestAction = minimax.getBestAction();
             actionEvaluation = minimax.getActionEvaluation(bestAction);
+            System.out.println(battlefield.toString());
             
             System.out.println("I think the defender wins against " + actionEvaluation.getKey() + " of " + actionEvaluation.getValue() + " possible opponents");            
             battlefield.playDefenderUnit(bestAction, true);            
