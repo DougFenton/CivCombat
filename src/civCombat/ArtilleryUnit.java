@@ -40,4 +40,9 @@ public class ArtilleryUnit extends Unit {
     public String getUnitType() {
         return "Artillery";
     }
+
+    @Override
+    public String toString() {
+        return "Artillery" + super.toString();
+    }
 }
