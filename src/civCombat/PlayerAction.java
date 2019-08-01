@@ -5,13 +5,11 @@
  */
 package civCombat;
 
-import Minimax.Action;
-
 /**
  *
  * @author Doug
  */
-public class PlayerAction implements Action {
+public class PlayerAction {
     
     private final int handPosition;
     private final int battlePosition;
