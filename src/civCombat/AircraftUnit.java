@@ -39,4 +39,9 @@ public class AircraftUnit extends Unit {
     public String getUnitType() {
         return "Aircraft";
     }
+
+    @Override
+    public String toString() {
+        return "Aircraft" + super.toString();
+    }
 }
