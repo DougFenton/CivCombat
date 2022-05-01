@@ -7,10 +7,7 @@ package civCombat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
-import javafx.util.Pair;
 
 /**
  *
@@ -253,7 +250,7 @@ public class ConsoleCombat {
             actionEvaluation = minimax.getActionEvaluation(bestAction);
             //System.out.println(battlefield.toString());
             
-            System.out.println("I think the defender wins against " + actionEvaluation.getKey() + " of " + actionEvaluation.getValue() + " possible opponents");            
+            System.out.println("I think the defender wins against " + actionEvaluation.getLeft() + " of " + actionEvaluation.getRight() + " possible opponents");
             battlefield.playDefenderUnit(bestAction, true);            
           
             printAttackerOptions();
