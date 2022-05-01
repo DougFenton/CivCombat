@@ -6,16 +6,15 @@
 package civCombat;
 
 /**
- *
  * @author Doug
  */
 public class Decision {
-    public final boolean winner;
-    public final PlayerAction action;
-    
-    public Decision(boolean result, PlayerAction action) {
-        this.winner = result;
-        this.action = action;
-    }
-    
+  public final boolean winner;
+  public final PlayerAction action;
+
+  public Decision(boolean result, PlayerAction action) {
+    this.winner = result;
+    this.action = action;
+  }
+
 }

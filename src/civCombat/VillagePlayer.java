@@ -8,22 +8,21 @@ package civCombat;
 import java.util.Random;
 
 /**
- *
  * @author Doug
  */
 public class VillagePlayer extends Player {
-    
-    public VillagePlayer() {
-        units = new Unit[3];
-        Random randomNumber = new Random();
-        int n = randomNumber.nextInt(3) + 1;
-        units[0] = new InfantryUnit(n, 4-n);
-        
-        n = randomNumber.nextInt(3) + 1;
-        units[1] = new MountedUnit(n, 4-n);
-        
-        n = randomNumber.nextInt(3) + 1;
-        units[2] = new ArtilleryUnit(n, 4-n);
-        
-    }
+
+  public VillagePlayer() {
+    units = new Unit[3];
+    Random randomNumber = new Random();
+    int n = randomNumber.nextInt(3) + 1;
+    units[0] = new InfantryUnit(n, 4 - n);
+
+    n = randomNumber.nextInt(3) + 1;
+    units[1] = new MountedUnit(n, 4 - n);
+
+    n = randomNumber.nextInt(3) + 1;
+    units[2] = new ArtilleryUnit(n, 4 - n);
+
+  }
 }

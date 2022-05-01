@@ -10,39 +10,38 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
  * @author Doug
  */
 public class Player {
-    //Array of units the player has in hand
-    protected Unit[] units;
+  //Array of units the player has in hand
+  protected Unit[] units;
 
-    public Player(Unit... units) {
-        this.units = units;
-    }
+  public Player(Unit... units) {
+    this.units = units;
+  }
 
-    //Return an ArrayList of player's units
-    public List<Unit> getUnitsList() {
-        return new ArrayList<>(Arrays.asList(units));
-    }
+  //Return an ArrayList of player's units
+  public List<Unit> getUnitsList() {
+    return new ArrayList<>(Arrays.asList(units));
+  }
 
-    //Get n'th unit from hand, 0 for first unit
-    public Unit getUnit(int n) {
-        return units[n];
-    }
+  //Get n'th unit from hand, 0 for first unit
+  public Unit getUnit(int n) {
+    return units[n];
+  }
 
-    public int getNumberOfUnits() {
-        return units.length;
-    }
+  public int getNumberOfUnits() {
+    return units.length;
+  }
 
-    public void printPlayer() {
-        //System.out.println("Printing Player");
-        System.out.println("Player has " + this.getNumberOfUnits() + " units");
-        for (Unit u : units) {
-            u.printUnit();
-            System.out.println();
-        }
-        System.out.println();
+  public void printPlayer() {
+    //System.out.println("Printing Player");
+    System.out.println("Player has " + this.getNumberOfUnits() + " units");
+    for (Unit u : units) {
+      u.printUnit();
+      System.out.println();
     }
+    System.out.println();
+  }
 
 }
