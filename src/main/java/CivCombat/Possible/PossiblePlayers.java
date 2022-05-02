@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CivCombat;
+package CivCombat.Possible;
 
 import CivCombat.Player.Player;
 import CivCombat.Unit.Unit;

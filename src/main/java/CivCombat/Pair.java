@@ -3,11 +3,11 @@ package CivCombat;
 /**
  * Contains two objects.
  */
-class Pair<T, T1> {
+public class Pair<T, T1> {
   T left;
   T1 right;
 
-  Pair(T left, T1 right) {
+  public Pair(T left, T1 right) {
     this.left = left;
     this.right = right;
   }

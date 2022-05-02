@@ -171,7 +171,7 @@ public class Battlefield {
     return actions;
   }
 
-  PlayerAction defaultAction(boolean defenderTurn) {
+  public PlayerAction defaultAction(boolean defenderTurn) {
     //Open positions on the battlefield
     boolean[] options;
     if (defenderTurn) {

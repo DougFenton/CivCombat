@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CivCombat;
+package CivCombat.Possible;
 
+import CivCombat.Battlefield;
+import CivCombat.MinimaxCombat;
+import CivCombat.Pair;
 import CivCombat.Player.Player;
 import CivCombat.Player.PlayerAction;
 
