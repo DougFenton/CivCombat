@@ -10,13 +10,4 @@ import CivCombat.Player.PlayerAction;
 /**
  * Data type storing an action and the game result.
  */
-public class Decision {
-  public final boolean winner;
-  public final PlayerAction action;
-
-  public Decision(boolean result, PlayerAction action) {
-    this.winner = result;
-    this.action = action;
-  }
-
-}
+public record Decision(boolean result, PlayerAction action) {}

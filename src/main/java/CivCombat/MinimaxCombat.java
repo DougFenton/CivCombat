@@ -50,7 +50,7 @@ public class MinimaxCombat {
         //Check if playing a unit there wins
         Decision checkMove = minValue(b.result(true, a));
         //If it does
-        if (checkMove.winner) {
+        if (checkMove.result()) {
           value = true;
           //Remember it
           bestAction = a;
@@ -89,7 +89,7 @@ public class MinimaxCombat {
         //Check if playing a unit there wins
         Decision checkMove = maxValue(b.result(false, a));
         //If it does
-        if (!checkMove.winner) {
+        if (!checkMove.result()) {
           value = false;
           //Remember it
           bestAction = a;
@@ -113,14 +113,14 @@ public class MinimaxCombat {
     if (defenderTurn) {
       for (PlayerAction a : b.possibleActions(defenderTurn)) {
         //minValue is false if attacker can win, true otherwise
-        if (minValue(b.result(defenderTurn, a)).winner) {
+        if (minValue(b.result(defenderTurn, a)).result()) {
           moves.add(a);
         }
       }
     } else {
       for (PlayerAction a : b.possibleActions(defenderTurn)) {
         //maxValue is true if defender can win, false otherwise
-        if (!maxValue(b.result(defenderTurn, a)).winner) {
+        if (!maxValue(b.result(defenderTurn, a)).result()) {
           moves.add(a);
         }
       }

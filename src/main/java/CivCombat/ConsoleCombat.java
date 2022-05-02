@@ -171,7 +171,7 @@ public class ConsoleCombat {
     defender.printPlayer();
 
     MinimaxCombat minimax = new MinimaxCombat(battlefield);
-    if (minimax.determineWinner(true).winner) {
+    if (minimax.determineWinner(true).result()) {
       System.out.println("Defender wins");
     } else {
       System.out.println("Attacker wins");
@@ -191,8 +191,8 @@ public class ConsoleCombat {
     while (!battlefield.allUnitsPlayed()) {
       minimax = new MinimaxCombat(battlefield);
       d = minimax.determineWinner(true);
-      winner = d.winner;
-      action = d.action;
+      winner = d.result();
+      action = d.action();
 
       if (winner) {
         System.out.println("\nI think Defender wins");
