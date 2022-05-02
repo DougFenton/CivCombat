@@ -6,21 +6,28 @@
 package CivCombat.Unit;
 
 /**
- * Units have an attack value, a health value, a level, and a number of wounds.
+ * Units have an attack value, a health value, a level, a type, and a number of wounds.
  * They can exist in a player's hand, or at a position on the battlefield.
  */
 public abstract class Unit {
+  private final int level;
+  private final UnitType type;
   private final int baseAttack;
   private final int baseHealth;
   private int wounds;
 
-  public Unit(int baseAttack, int baseHealth) {
+
+  public Unit(UnitType type, int level, int baseAttack, int baseHealth) {
+    this.level = level;
+    this.type = type;
     this.baseAttack = baseAttack;
     this.baseHealth = baseHealth;
     this.wounds = 0;
   }
 
   public Unit(Unit original) {
+    this.type = original.type;
+    this.level = original.level;
     this.baseAttack = original.baseAttack;
     this.baseHealth = original.baseHealth;
     this.wounds = original.wounds;
@@ -30,8 +37,7 @@ public abstract class Unit {
 
   public abstract boolean trumps(Unit unit);
 
-  public abstract String getUnitType();
-
+  public abstract UnitType getUnitType();
 
   public int getAttack() {
     return baseAttack;

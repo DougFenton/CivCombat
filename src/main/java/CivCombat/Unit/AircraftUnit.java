@@ -11,7 +11,7 @@ package CivCombat.Unit;
 public class AircraftUnit extends Unit {
 
   public AircraftUnit(int baseAttack, int baseHealth) {
-    super(baseAttack, baseHealth);
+    super(UnitType.AIRCRAFT, 4, baseAttack, baseHealth);
   }
 
   public AircraftUnit(AircraftUnit unit) {
@@ -35,8 +35,8 @@ public class AircraftUnit extends Unit {
   }
 
   @Override
-  public String getUnitType() {
-    return "Aircraft";
+  public UnitType getUnitType() {
+    return UnitType.AIRCRAFT;
   }
 
   @Override

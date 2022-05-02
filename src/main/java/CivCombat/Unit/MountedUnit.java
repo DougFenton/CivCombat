@@ -11,8 +11,8 @@ package CivCombat.Unit;
  */
 public class MountedUnit extends Unit {
 
-  public MountedUnit(int baseAttack, int baseHealth) {
-    super(baseAttack, baseHealth);
+  public MountedUnit(int level, int baseAttack, int baseHealth) {
+    super(UnitType.MOUNTED, level, baseAttack, baseHealth);
   }
 
   public MountedUnit(MountedUnit unit) {
@@ -21,8 +21,7 @@ public class MountedUnit extends Unit {
 
   @Override
   public boolean trumps(Unit unit) {
-    //return ("Artillery".equals(unit.type));
-    return unit instanceof ArtilleryUnit;
+    return unit.getUnitType() == UnitType.ARTILLERY;
   }
 
   @Override
@@ -37,8 +36,8 @@ public class MountedUnit extends Unit {
   }
 
   @Override
-  public String getUnitType() {
-    return "Mounted";
+  public UnitType getUnitType() {
+    return UnitType.MOUNTED;
   }
 
   @Override
