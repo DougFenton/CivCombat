@@ -1,4 +1,4 @@
-package civCombat;
+package CivCombat;
 
 class Pair<T, T1> {
   T left;
