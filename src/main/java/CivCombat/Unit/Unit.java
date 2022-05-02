@@ -7,6 +7,9 @@ package CivCombat.Unit;
 
 import java.util.Objects;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * Units have an attack value, a health value, a level, a type, and a number of wounds.
  * They can exist in a player's hand, or at a position on the battlefield.
@@ -14,23 +17,30 @@ import java.util.Objects;
 public abstract class Unit {
   private final int level;
   private final UnitType type;
-  private final int baseAttack;
-  private final int baseHealth;
+  private final int attack;
+  private final int health;
+
+  // Once a unit's wounds reach its health, it is dead and it's wounds can no longer change.
   private int wounds;
 
-  public Unit(UnitType type, int level, int baseAttack, int baseHealth) {
+  public Unit(UnitType type, int level, int attack, int health) {
+    // Aircraft have a total of 2 more attack + health.
+    int aircraftAdjustment = type == UnitType.AIRCRAFT ? 2 : 0;
+    if (attack + health != level * 2 + 2 + aircraftAdjustment) {
+      throw new InvalidUnitStatsException(type, level, attack, health);
+    }
     this.level = level;
     this.type = type;
-    this.baseAttack = baseAttack;
-    this.baseHealth = baseHealth;
+    this.attack = attack;
+    this.health = health;
     this.wounds = 0;
   }
 
   public Unit(Unit original) {
     this.type = original.type;
     this.level = original.level;
-    this.baseAttack = original.baseAttack;
-    this.baseHealth = original.baseHealth;
+    this.attack = original.attack;
+    this.health = original.health;
     this.wounds = original.wounds;
   }
 
@@ -45,23 +55,29 @@ public abstract class Unit {
   }
 
   public int getAttack() {
-    return baseAttack;
+    return attack;
   }
 
   public int getHealth() {
-    return baseHealth;
+    return health;
   }
 
   public void applyWounds(int wounds) {
-    this.wounds += wounds;
+    if (isDead()) {
+      throw new UnitIsDeadException();
+    }
+    this.wounds = min(this.wounds + wounds, this.getHealth());
   }
 
   public void removeWounds(int wounds) {
-    this.wounds -= wounds;
+    if (isDead()) {
+      throw new UnitIsDeadException();
+    }
+    this.wounds = max(this.wounds - wounds, 0);
   }
 
   public void removeWounds() {
-    removeWounds(wounds);
+    removeWounds(this.wounds);
   }
 
   public int getWounds() {
@@ -69,7 +85,7 @@ public abstract class Unit {
   }
 
   public boolean isDead() {
-    return wounds >= baseHealth;
+    return wounds >= health;
   }
 
   @Override
@@ -77,11 +93,11 @@ public abstract class Unit {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Unit unit = (Unit) o;
-    return level == unit.level && baseAttack == unit.baseAttack && baseHealth == unit.baseHealth && wounds == unit.wounds && type == unit.type;
+    return level == unit.level && attack == unit.attack && health == unit.health && wounds == unit.wounds && type == unit.type;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(level, type, baseAttack, baseHealth, wounds);
+    return Objects.hash(level, type, attack, health, wounds);
   }
 }
