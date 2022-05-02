@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * @author Doug
+ * A console interface for simulating combats.
  */
 public class ConsoleCombat {
 

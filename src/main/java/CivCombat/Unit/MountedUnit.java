@@ -7,7 +7,7 @@ package CivCombat.Unit;
 
 
 /**
- * @author Doug
+ * A mounted unit.
  */
 public class MountedUnit extends Unit {
 

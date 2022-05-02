@@ -6,7 +6,8 @@
 package CivCombat.Unit;
 
 /**
- * @author Doug
+ * Units have an attack value, a health value, a level, and a number of wounds.
+ * They can exist in a player's hand, or at a position on the battlefield.
  */
 public abstract class Unit {
   private final int baseAttack;

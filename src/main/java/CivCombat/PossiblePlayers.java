@@ -10,7 +10,7 @@ import CivCombat.Unit.Unit;
 import java.util.*;
 
 /**
- * @author Doug
+ * Represents a set of possible configurations of opponent units.
  */
 public class PossiblePlayers {
 

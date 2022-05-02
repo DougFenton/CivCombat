@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Doug
+ * Calculates the result of a combat using the Minimax algorithm.
  */
 public class MinimaxCombat {
 

@@ -11,7 +11,7 @@ import CivCombat.Unit.Unit;
 import java.util.*;
 
 /**
- * @author Doug
+ * Represents the units in hand and played for two players, attacker and defender.
  */
 public class Battlefield {
 
@@ -39,11 +39,11 @@ public class Battlefield {
     this.defenderUnits = new Unit[battlefieldSize];
   }
 
+  /**
+   * Creating a copy of battlefield, making new objects for every
+   * reference type - i.e a deep copy
+   */
   public Battlefield(Battlefield b) {
-    /**
-     * Creating a copy of battlefield, making new objects for every
-     * reference type - i.e a deep copy
-     */
 
     //Deep copy of attacker hand and defender hand
     List<Unit> newAttackerHand = new ArrayList<>();

@@ -6,7 +6,7 @@
 package CivCombat;
 
 /**
- * @author Doug
+ * Data type storing an action and the game result.
  */
 public class Decision {
   public final boolean winner;

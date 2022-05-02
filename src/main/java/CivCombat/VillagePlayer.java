@@ -13,7 +13,7 @@ import CivCombat.Unit.Unit;
 import java.util.Random;
 
 /**
- * @author Doug
+ * A random player representing a barbarian village. Has a level 1 unit of each non-aircraft type.
  */
 public class VillagePlayer extends Player {
 

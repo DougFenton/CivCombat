@@ -6,7 +6,7 @@
 package CivCombat.Unit;
 
 /**
- * @author Doug
+ * An infantry unit.
  */
 public class InfantryUnit extends Unit {
 

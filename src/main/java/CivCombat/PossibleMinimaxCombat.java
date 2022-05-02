@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * @author Doug
+ * An extension of {@link MinimaxCombat}, that calculates all possible combats given no knowledge about the opponent's hand.
  */
 public class PossibleMinimaxCombat {
 

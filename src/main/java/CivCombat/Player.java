@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author Doug
+ * Represents either the attacker or defender in a single combat.
  */
 public class Player {
   //Array of units the player has in hand

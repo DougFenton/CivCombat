@@ -6,7 +6,7 @@
 package CivCombat;
 
 /**
- * @author Doug
+ * Represents playing a unit from a given hand position to a given board position.
  */
 public class PlayerAction {
 

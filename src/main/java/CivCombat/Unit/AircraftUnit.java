@@ -6,7 +6,7 @@
 package CivCombat.Unit;
 
 /**
- * @author Doug
+ * An aircraft unit. Always level 4.
  */
 public class AircraftUnit extends Unit {
 

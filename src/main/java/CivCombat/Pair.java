@@ -1,5 +1,8 @@
 package CivCombat;
 
+/**
+ * Contains two objects.
+ */
 class Pair<T, T1> {
   T left;
   T1 right;
