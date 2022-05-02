@@ -29,18 +29,8 @@ public class AircraftUnit extends Unit {
   }
 
   @Override
-  public void printUnit() {
-    System.out.print("      Unit Type: Aircraft ");
-    super.printUnit();
-  }
-
-  @Override
   public UnitType getUnitType() {
     return UnitType.AIRCRAFT;
   }
 
-  @Override
-  public String toString() {
-    return "Aircraft" + super.toString();
-  }
 }

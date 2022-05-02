@@ -16,7 +16,6 @@ public abstract class Unit {
   private final int baseHealth;
   private int wounds;
 
-
   public Unit(UnitType type, int level, int baseAttack, int baseHealth) {
     this.level = level;
     this.type = type;
@@ -38,6 +37,10 @@ public abstract class Unit {
   public abstract boolean trumps(Unit unit);
 
   public abstract UnitType getUnitType();
+
+  public int getLevel() {
+    return level;
+  }
 
   public int getAttack() {
     return baseAttack;
@@ -65,16 +68,6 @@ public abstract class Unit {
 
   public boolean isDead() {
     return wounds >= baseHealth;
-  }
-
-  public void printUnit() {
-    System.out.print("Attack: " + this.baseAttack + " ");
-    System.out.print("Health: " + this.baseHealth + " ");
-  }
-
-  @Override
-  public String toString() {
-    return "Unit{" + "baseAttack=" + baseAttack + ", baseHealth=" + baseHealth + ", wounds=" + wounds + '}';
   }
 
   @Override

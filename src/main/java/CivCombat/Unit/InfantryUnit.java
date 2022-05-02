@@ -29,20 +29,8 @@ public class InfantryUnit extends Unit {
   }
 
   @Override
-  public void printUnit() {
-    System.out.print("      Unit Type: Infantry ");
-    super.printUnit();
-  }
-
-  @Override
   public UnitType getUnitType() {
     return UnitType.INFANTRY;
   }
-
-  @Override
-  public String toString() {
-    return "Infantry" + super.toString();
-  }
-
 
 }

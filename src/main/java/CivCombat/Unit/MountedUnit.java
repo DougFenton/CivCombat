@@ -30,18 +30,8 @@ public class MountedUnit extends Unit {
   }
 
   @Override
-  public void printUnit() {
-    System.out.print("      Unit Type: Mounted ");
-    super.printUnit();
-  }
-
-  @Override
   public UnitType getUnitType() {
     return UnitType.MOUNTED;
   }
 
-  @Override
-  public String toString() {
-    return "Mounted" + super.toString();
-  }
 }

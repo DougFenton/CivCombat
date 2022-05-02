@@ -29,18 +29,8 @@ public class ArtilleryUnit extends Unit {
   }
 
   @Override
-  public void printUnit() {
-    System.out.print("      Unit Type: Artillery ");
-    super.printUnit();
-  }
-
-  @Override
   public UnitType getUnitType() {
     return UnitType.ARTILLERY;
   }
 
-  @Override
-  public String toString() {
-    return "Artillery" + super.toString();
-  }
 }
