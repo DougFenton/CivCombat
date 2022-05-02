@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CivCombat;
+package CivCombat.Player;
 
 /**
  * Represents playing a unit from a given hand position to a given board position.

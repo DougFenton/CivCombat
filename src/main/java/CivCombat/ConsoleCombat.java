@@ -5,6 +5,9 @@
  */
 package CivCombat;
 
+import CivCombat.Player.Player;
+import CivCombat.Player.PlayerAction;
+import CivCombat.Player.VillagePlayer;
 import CivCombat.Unit.ArtilleryUnit;
 import CivCombat.Unit.InfantryUnit;
 import CivCombat.Unit.MountedUnit;
@@ -26,15 +29,15 @@ public class ConsoleCombat {
   private static void initialize() {
     //Preset units
     Unit[] units1 = new Unit[3];
-    units1[0] = new InfantryUnit(2, 2);
-    units1[1] = new MountedUnit(2, 2);
-    units1[2] = new ArtilleryUnit(1, 3);
+    units1[0] = new InfantryUnit(1, 2, 2);
+    units1[1] = new MountedUnit(1, 2, 2);
+    units1[2] = new ArtilleryUnit(1, 1, 3);
     Player sampleAttacker = new Player(units1);
 
     Unit[] units2 = new Unit[3];
-    units2[0] = new InfantryUnit(1, 3);
-    units2[1] = new MountedUnit(2, 2);
-    units2[2] = new ArtilleryUnit(3, 1);
+    units2[0] = new InfantryUnit(1, 1, 3);
+    units2[1] = new MountedUnit(1, 2, 2);
+    units2[2] = new ArtilleryUnit(1, 3, 1);
     Player sampleDefender = new Player(units2);
 
     //Create attacker and defender
@@ -109,8 +112,8 @@ public class ConsoleCombat {
 
   private static void testUnits() {
     Unit[] units = new Unit[2];
-    units[0] = new InfantryUnit(2, 2);
-    units[1] = new MountedUnit(2, 2);
+    units[0] = new InfantryUnit(1, 2, 2);
+    units[1] = new MountedUnit(1, 2, 2);
     System.out.println(units[0].trumps(units[1]));
     System.out.println(units[1].trumps(units[0]));
   }

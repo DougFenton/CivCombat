@@ -5,8 +5,10 @@
  */
 package CivCombat;
 
-
+import CivCombat.Player.Player;
+import CivCombat.Player.PlayerAction;
 import CivCombat.Unit.Unit;
+import CivCombat.Unit.UnitConsolePrinter;
 
 import java.util.*;
 
@@ -215,7 +217,7 @@ public class Battlefield {
         this.attackerHandSize -= 1;
         if (log) {
           System.out.println("Playing attacker unit at position " + battlePosition);
-          unitPlayed.printUnit();
+          UnitConsolePrinter.print(unitPlayed);
           System.out.println();
         }
 
@@ -243,7 +245,7 @@ public class Battlefield {
         this.defenderHandSize -= 1;
         if (log) {
           System.out.println("Playing defender unit at position " + battlePosition);
-          unitPlayed.printUnit();
+          UnitConsolePrinter.print(unitPlayed);
           System.out.println();
         }
 
@@ -313,7 +315,7 @@ public class Battlefield {
     if (attacker.isDead()) {
       if (log) {
         System.out.println("Attacker unit is slain in position " + battlePosition);
-        attacker.printUnit();
+        UnitConsolePrinter.print(attacker);
         System.out.println();
       }
       attacker.removeWounds();
@@ -322,7 +324,7 @@ public class Battlefield {
     if (defender.isDead()) {
       if (log) {
         System.out.println("Defender unit is slain in position " + battlePosition);
-        defender.printUnit();
+        UnitConsolePrinter.print(defender);
         System.out.println();
       }
       defender.removeWounds();

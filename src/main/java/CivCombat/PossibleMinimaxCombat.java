@@ -5,6 +5,9 @@
  */
 package CivCombat;
 
+import CivCombat.Player.Player;
+import CivCombat.Player.PlayerAction;
+
 import java.util.*;
 import java.util.Map.Entry;
 

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CivCombat;
+package CivCombat.Player;
 
 
 import CivCombat.Unit.Unit;
+import CivCombat.Unit.UnitConsolePrinter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,14 +23,8 @@ public class Player {
     this.units = units;
   }
 
-  //Return an ArrayList of player's units
   public List<Unit> getUnitsList() {
-    return new ArrayList<>(Arrays.asList(units));
-  }
-
-  //Get n'th unit from hand, 0 for first unit
-  public Unit getUnit(int n) {
-    return units[n];
+    return Arrays.asList(units);
   }
 
   public int getNumberOfUnits() {
@@ -38,11 +32,9 @@ public class Player {
   }
 
   public void printPlayer() {
-    //System.out.println("Printing Player");
     System.out.println("Player has " + this.getNumberOfUnits() + " units");
     for (Unit u : units) {
-      u.printUnit();
-      System.out.println();
+      UnitConsolePrinter.print(u, 1);
     }
     System.out.println();
   }

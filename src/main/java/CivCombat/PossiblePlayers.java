@@ -5,6 +5,7 @@
  */
 package CivCombat;
 
+import CivCombat.Player.Player;
 import CivCombat.Unit.Unit;
 
 import java.util.*;

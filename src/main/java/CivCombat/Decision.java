@@ -5,6 +5,8 @@
  */
 package CivCombat;
 
+import CivCombat.Player.PlayerAction;
+
 /**
  * Data type storing an action and the game result.
  */

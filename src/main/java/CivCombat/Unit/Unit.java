@@ -5,6 +5,8 @@
  */
 package CivCombat.Unit;
 
+import java.util.Objects;
+
 /**
  * Units have an attack value, a health value, a level, a type, and a number of wounds.
  * They can exist in a player's hand, or at a position on the battlefield.
@@ -71,34 +73,15 @@ public abstract class Unit {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 41 * hash + this.baseAttack;
-    hash = 41 * hash + this.baseHealth;
-    hash = 41 * hash + this.wounds;
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Unit unit = (Unit) o;
+    return level == unit.level && baseAttack == unit.baseAttack && baseHealth == unit.baseHealth && wounds == unit.wounds && type == unit.type;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final Unit other = (Unit) obj;
-    if (this.baseAttack != other.baseAttack) {
-      return false;
-    }
-    if (this.baseHealth != other.baseHealth) {
-      return false;
-    }
-    return this.wounds == other.wounds;
+  public int hashCode() {
+    return Objects.hash(level, type, baseAttack, baseHealth, wounds);
   }
-
-
 }

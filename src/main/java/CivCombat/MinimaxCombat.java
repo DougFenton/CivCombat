@@ -5,6 +5,8 @@
  */
 package CivCombat;
 
+import CivCombat.Player.PlayerAction;
+
 import java.util.HashSet;
 import java.util.Set;
 

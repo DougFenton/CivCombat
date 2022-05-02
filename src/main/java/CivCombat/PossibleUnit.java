@@ -45,15 +45,15 @@ public class PossibleUnit {
     possibleUnits = new ArrayList<>();
     if ("Infantry".equals(unitType)) {
       for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new InfantryUnit(unitLevel + i, unitLevel + 2 - i));
+        possibleUnits.add(new InfantryUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
       }
     } else if ("Mounted".equals(unitType)) {
       for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new MountedUnit(unitLevel + i, unitLevel + 2 - i));
+        possibleUnits.add(new MountedUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
       }
     } else if ("Artillery".equals(unitType)) {
       for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new ArtilleryUnit(unitLevel + i, unitLevel + 2 - i));
+        possibleUnits.add(new ArtilleryUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
       }
     } else {
       for (int i = 0; i < 4; i++) {

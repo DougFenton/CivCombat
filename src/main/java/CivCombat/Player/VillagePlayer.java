@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CivCombat;
+package CivCombat.Player;
 
 import CivCombat.Unit.ArtilleryUnit;
 import CivCombat.Unit.InfantryUnit;
@@ -21,13 +21,13 @@ public class VillagePlayer extends Player {
     units = new Unit[3];
     Random randomNumber = new Random();
     int n = randomNumber.nextInt(3) + 1;
-    units[0] = new InfantryUnit(n, 4 - n);
+    units[0] = new InfantryUnit(1, n, 4 - n);
 
     n = randomNumber.nextInt(3) + 1;
-    units[1] = new MountedUnit(n, 4 - n);
+    units[1] = new MountedUnit(1, n, 4 - n);
 
     n = randomNumber.nextInt(3) + 1;
-    units[2] = new ArtilleryUnit(n, 4 - n);
+    units[2] = new ArtilleryUnit(1, n, 4 - n);
 
   }
 }
