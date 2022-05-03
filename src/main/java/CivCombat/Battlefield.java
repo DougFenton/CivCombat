@@ -11,30 +11,30 @@ import CivCombat.Unit.Unit;
 import CivCombat.Unit.UnitConsolePrinter;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Represents the units in hand and played for two players, attacker and defender.
+ * At the start of a combat, the defender is the first to play a unit.
  */
 public class Battlefield {
+  private static final Logger LOGGER = Logger.getLogger(Battlefield.class.getName());
 
   //Determines number of positions to play units to
   private final int battlefieldSize;
+
   //Arrays containing units in play for each player, removed as units played
   private final Unit[] attackerUnits;
   private final Unit[] defenderUnits;
-  /**
-   * At the start of a combat, the defender is the first to play a unit
-   */
+
   //Lists of units not yet played
   private List<Unit> attackerHand;
   private List<Unit> defenderHand;
-  private int attackerHandSize;
-  private int defenderHandSize;
 
   public Battlefield(Player attacker, Player defender) {
     initializePlayerHands(attacker, defender);
 
-    this.battlefieldSize = attackerHandSize + defenderHandSize;
+    this.battlefieldSize = attackerHand.size() + defenderHand.size();
 
     //No units played at start, no units killed
     this.attackerUnits = new Unit[battlefieldSize];
@@ -60,9 +60,6 @@ public class Battlefield {
     }
     this.defenderHand = newDefenderHand;
 
-    //Sizes are ints, a primitive, so simply copy value
-    this.attackerHandSize = b.attackerHandSize;
-    this.defenderHandSize = b.defenderHandSize;
     this.battlefieldSize = b.battlefieldSize;
 
     //Deep copy attackerUnits and defenderUnits
@@ -91,8 +88,6 @@ public class Battlefield {
   private void initializePlayerHands(Player attacker, Player defender) {
     this.attackerHand = attacker.getUnitsList();
     this.defenderHand = defender.getUnitsList();
-    this.attackerHandSize = attacker.getNumberOfUnits();
-    this.defenderHandSize = defender.getNumberOfUnits();
   }
 
   public Battlefield copyBattlefield() {
@@ -153,10 +148,10 @@ public class Battlefield {
     int handSize;
     if (defenderTurn) {
       options = this.getDefenderOptions();
-      handSize = this.getDefenderHandSize();
+      handSize = defenderHand.size();
     } else {
       options = this.getAttackerOptions();
-      handSize = this.getAttackerHandSize();
+      handSize =  attackerHand.size();
     }
     //For each position on the battlefield
     for (int battlePosition = 0; battlePosition < options.length; battlePosition++) {
@@ -194,43 +189,38 @@ public class Battlefield {
     Battlefield newB = this.copyBattlefield();
     //Play the desired unit
     if (defenderPlayed) {
-      newB.playDefenderUnit(action, false);
+      newB.playDefenderUnit(action);
     } else {
-      newB.playAttackerUnit(action, false);
+      newB.playAttackerUnit(action);
     }
     return newB;
   }
 
-  public Unit playAttackerUnit(PlayerAction action, boolean log) {
+  public Unit playAttackerUnit(PlayerAction action) {
     Unit unitPlayed;
     int handPosition = action.getHandPosition();
     int battlePosition = action.getBattlePosition();
-    //System.out.println("Playing attacker unit " + handPosition + " at battle position " + battlePosition);
 
     if (attackerUnits[battlePosition] != null) {
       throw new IllegalArgumentException("Attacker Position not empty");
     } else {
-      if (attackerHandSize - 1 < handPosition) {
+      if (attackerHand.size() - 1 < handPosition) {
         throw new IllegalArgumentException("Invalid Attacker Unit selected");
       } else {
         unitPlayed = attackerHand.remove(handPosition);
-        this.attackerHandSize -= 1;
-        if (log) {
-          System.out.println("Playing attacker unit at position " + battlePosition);
-          UnitConsolePrinter.print(unitPlayed);
-          System.out.println();
-        }
+        LOGGER.info("Playing attacker unit at position " + battlePosition);
+        LOGGER.info(UnitConsolePrinter.unitInfo(unitPlayed));
 
         attackerUnits[battlePosition] = unitPlayed;
         if (defenderUnits[battlePosition] != null) {
-          fight(battlePosition, log);
+          fight(battlePosition);
         }
       }
     }
     return unitPlayed;
   }
 
-  public Unit playDefenderUnit(PlayerAction action, boolean log) {
+  public Unit playDefenderUnit(PlayerAction action) {
     Unit unitPlayed;
     int handPosition = action.getHandPosition();
     int battlePosition = action.getBattlePosition();
@@ -238,36 +228,24 @@ public class Battlefield {
     if (defenderUnits[battlePosition] != null) {
       throw new IllegalArgumentException("Defender Position not empty");
     } else {
-      if (defenderHandSize - 1 < handPosition) {
+      if (defenderHand.size() - 1 < handPosition) {
         throw new IllegalArgumentException("Invalid Defender Unit selected");
       } else {
         unitPlayed = defenderHand.remove(handPosition);
-        this.defenderHandSize -= 1;
-        if (log) {
-          System.out.println("Playing defender unit at position " + battlePosition);
-          UnitConsolePrinter.print(unitPlayed);
-          System.out.println();
-        }
+        LOGGER.info("Playing defender unit at position " + battlePosition);
+        LOGGER.info(UnitConsolePrinter.unitInfo(unitPlayed));
 
         defenderUnits[battlePosition] = unitPlayed;
         if (attackerUnits[battlePosition] != null) {
-          fight(battlePosition, log);
+          fight(battlePosition);
         }
       }
     }
     return unitPlayed;
   }
 
-  public int getAttackerHandSize() {
-    return attackerHandSize;
-  }
-
-  public int getDefenderHandSize() {
-    return defenderHandSize;
-  }
-
   public boolean allUnitsPlayed() {
-    return (attackerHandSize == 0 && defenderHandSize == 0);
+    return (attackerHand.size() == 0 && defenderHand.size() == 0);
   }
 
   public boolean determineWinner() {
@@ -284,12 +262,11 @@ public class Battlefield {
             - defenderUnits[i].getWounds();
       }
     }
-    //System.out.println("Attacker strength " + attackerStrength + " Defender Strength " + defenderStrength);
     return attackerStrength <= defenderStrength;
   }
 
-  private void fight(int battlePosition, boolean log) {
-    //System.out.println("Fight at position " + battlePosition);
+  private void fight(int battlePosition) {
+    LOGGER.info("Fight at position " + battlePosition);
 
     //Attacker is attacker's unit, regardless of which was played
     Unit attacker = attackerUnits[battlePosition];
@@ -313,20 +290,14 @@ public class Battlefield {
 
     //Heal and remove dead units
     if (attacker.isDead()) {
-      if (log) {
-        System.out.println("Attacker unit is slain in position " + battlePosition);
-        UnitConsolePrinter.print(attacker);
-        System.out.println();
-      }
+      LOGGER.info("Attacker unit is slain in position " + battlePosition);
+      LOGGER.info(UnitConsolePrinter.unitInfo(attacker));
       attacker.removeWounds();
       attackerUnits[battlePosition] = null;
     }
     if (defender.isDead()) {
-      if (log) {
-        System.out.println("Defender unit is slain in position " + battlePosition);
-        UnitConsolePrinter.print(defender);
-        System.out.println();
-      }
+      LOGGER.info("Defender unit is slain in position " + battlePosition);
+      LOGGER.info(UnitConsolePrinter.unitInfo(defender));
       defender.removeWounds();
       defenderUnits[battlePosition] = null;
     }
@@ -334,6 +305,6 @@ public class Battlefield {
 
   @Override
   public String toString() {
-    return "Battlefield{" + "attackerHand=" + attackerHand + ", defenderHand=" + defenderHand + ", battlefieldSize=" + battlefieldSize + ", attackerUnits=" + Arrays.toString(attackerUnits) + ", defenderUnits=" + Arrays.toString(defenderUnits) + '}';
+    return "Battlefield {" + "attackerHand=" + attackerHand + ", defenderHand=" + defenderHand + ", battlefieldSize=" + battlefieldSize + ", attackerUnits=" + Arrays.toString(attackerUnits) + ", defenderUnits=" + Arrays.toString(defenderUnits) + '}';
   }
 }

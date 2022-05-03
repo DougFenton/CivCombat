@@ -27,12 +27,8 @@ public class Player {
     return Arrays.asList(units);
   }
 
-  public int getNumberOfUnits() {
-    return units.length;
-  }
-
   public void printPlayer() {
-    System.out.println("Player has " + this.getNumberOfUnits() + " units");
+    System.out.println("Player has " + units.length + " units");
     for (Unit u : units) {
       UnitConsolePrinter.print(u, 1);
     }
