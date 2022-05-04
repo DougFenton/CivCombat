@@ -16,9 +16,7 @@ import CivCombat.Unit.InfantryUnit;
 import CivCombat.Unit.MountedUnit;
 import CivCombat.Unit.Unit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * A console interface for simulating combats.
@@ -30,18 +28,6 @@ public class ConsoleCombat {
   private static Battlefield battlefield;
 
   private static void initialize() {
-    //Preset units
-    Unit[] units1 = new Unit[3];
-    units1[0] = new InfantryUnit(1, 2, 2);
-    units1[1] = new MountedUnit(1, 2, 2);
-    units1[2] = new ArtilleryUnit(1, 1, 3);
-    Player sampleAttacker = new Player(units1);
-
-    Unit[] units2 = new Unit[3];
-    units2[0] = new InfantryUnit(1, 1, 3);
-    units2[1] = new MountedUnit(1, 2, 2);
-    units2[2] = new ArtilleryUnit(1, 3, 1);
-    Player sampleDefender = new Player(units2);
 
     //Create attacker and defender
     attacker = new VillagePlayer();
@@ -59,6 +45,22 @@ public class ConsoleCombat {
     System.out.println("Initialised");
   }
 
+  private Player getSampleAttacker() {
+    Set<Unit> units = new LinkedHashSet<>();
+    units.add(new InfantryUnit(1, 2, 2));
+    units.add(new MountedUnit(1, 2, 2));
+    units.add(new ArtilleryUnit(1, 1, 3));
+    return new Player(units);
+  }
+
+  private Player getSampleDefender() {
+    Set<Unit> units = new LinkedHashSet<>();
+    units.add(new InfantryUnit(1, 1, 3));
+    units.add(new MountedUnit(1, 2, 2));
+    units.add(new ArtilleryUnit(1, 3, 1));
+    return new Player(units);
+  }
+
   private static void printAttackerOptions() {
     System.out.println("Printing open battlefield positions for attacker:");
     boolean[] options = battlefield.getAttackerOptions();
@@ -67,10 +69,6 @@ public class ConsoleCombat {
         System.out.print(i + " ");
       }
     }
-
-    System.out.println("\nAttacker has " + battlefield.getAttackerHandSize()
-        + " units remaining");
-    //System.out.println(Arrays.toString(options));
   }
 
   private static void printDefenderOptions() {
@@ -81,44 +79,18 @@ public class ConsoleCombat {
         System.out.print(i + " ");
       }
     }
-    System.out.println("\nDefender has " + battlefield.getDefenderHandSize()
-        + " units remaining");
-    //System.out.println(Arrays.toString(options));
   }
 
   private static void testScript() {
-    System.out.println("Printing attacker");
-    attacker.printPlayer();
+    printAttackerOptions();
 
-    System.out.println("Printing defender");
-    defender.printPlayer();
+    battlefield.playDefenderUnit(new PlayerAction(0, 0));
 
     printAttackerOptions();
 
-    battlefield.playDefenderUnit(new PlayerAction(0, 0), true);
+    battlefield.playAttackerUnit(new PlayerAction(1, 0));
 
     printAttackerOptions();
-
-    battlefield.playAttackerUnit(new PlayerAction(1, 0), true);
-
-    printAttackerOptions();
-  }
-
-  private static void testHandSize() {
-    Battlefield b1 = battlefield.copyBattlefield();
-    System.out.println(b1.getDefenderHandSize());
-    battlefield.playDefenderUnit(new PlayerAction(0, 0), true);
-    Battlefield b2 = battlefield.copyBattlefield();
-    System.out.println(b1.getDefenderHandSize());
-    System.out.println(b2.getDefenderHandSize());
-  }
-
-  private static void testUnits() {
-    Unit[] units = new Unit[2];
-    units[0] = new InfantryUnit(1, 2, 2);
-    units[1] = new MountedUnit(1, 2, 2);
-    System.out.println(units[0].trumps(units[1]));
-    System.out.println(units[1].trumps(units[0]));
   }
 
   private static void playerCombat() {
@@ -146,14 +118,14 @@ public class ConsoleCombat {
       handPos = Integer.parseInt(scanner.nextLine());
       System.out.println("Input battle position");
       battlePos = Integer.parseInt(scanner.nextLine());
-      battlefield.playDefenderUnit(new PlayerAction(handPos, battlePos), true);
+      battlefield.playDefenderUnit(new PlayerAction(handPos, battlePos));
 
       printAttackerOptions();
       System.out.println("Input hand position");
       handPos = Integer.parseInt(scanner.nextLine());
       System.out.println("Input battle position");
       battlePos = Integer.parseInt(scanner.nextLine());
-      battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos), true);
+      battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos));
     }
 
     if (battlefield.determineWinner()) {
@@ -199,14 +171,14 @@ public class ConsoleCombat {
       } else {
         System.out.println("\nI think Attacker can win");
       }
-      battlefield.playDefenderUnit(action, true);
+      battlefield.playDefenderUnit(action);
 
       printAttackerOptions();
       System.out.println("Input hand position");
       handPos = Integer.parseInt(scanner.nextLine());
       System.out.println("Input battle position");
       battlePos = Integer.parseInt(scanner.nextLine());
-      battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos), true);
+      battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos));
     }
 
     System.out.println();
@@ -261,14 +233,14 @@ public class ConsoleCombat {
       //System.out.println(battlefield.toString());
 
       System.out.println("I think the defender wins against " + actionEvaluation.getLeft() + " of " + actionEvaluation.getRight() + " possible opponents");
-      battlefield.playDefenderUnit(bestAction, true);
+      battlefield.playDefenderUnit(bestAction);
 
       printAttackerOptions();
       System.out.println("Input hand position");
       handPos = Integer.parseInt(scanner.nextLine());
       System.out.println("Input battle position");
       battlePos = Integer.parseInt(scanner.nextLine());
-      Unit playedUnit = battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos), true);
+      Unit playedUnit = battlefield.playAttackerUnit(new PlayerAction(handPos, battlePos));
       playedAttackerUnits.add(playedUnit);
     }
 
@@ -282,14 +254,12 @@ public class ConsoleCombat {
 
   public static void main(String[] args) {
     initialize();
-    //testHandSize();
-    //testUnits();
-    //testScript();
+    testScript();
     //playerCombat();
     //minmaxVillage();
     //minimaxPlayer();
     //testPossibleMinimax();
-    possibleMinimaxPlayer();
+    //possibleMinimaxPlayer();
   }
 
 }

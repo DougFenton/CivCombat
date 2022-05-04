@@ -86,8 +86,8 @@ public class Battlefield {
   }
 
   private void initializePlayerHands(Player attacker, Player defender) {
-    this.attackerHand = attacker.getUnitsList();
-    this.defenderHand = defender.getUnitsList();
+    this.attackerHand = new ArrayList<>(attacker.getUnitsList());
+    this.defenderHand = new ArrayList<>(defender.getUnitsList());
   }
 
   public Battlefield copyBattlefield() {
@@ -301,6 +301,14 @@ public class Battlefield {
       defender.removeWounds();
       defenderUnits[battlePosition] = null;
     }
+  }
+
+  public int getAttackerHandSize() {
+    return attackerHand.size();
+  }
+
+  public int getDefenderHandSize() {
+    return defenderHand.size();
   }
 
   @Override

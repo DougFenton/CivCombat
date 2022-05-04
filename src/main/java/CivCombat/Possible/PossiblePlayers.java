@@ -64,8 +64,8 @@ public class PossiblePlayers {
     int[] pointers = new int[unitsPerPlayer];
     Arrays.fill(pointers, 0);
 
-    //Array to hold Units for our next player
-    Unit[] units;
+    //Set to hold Units for our next player
+    Set<Unit> units = new LinkedHashSet<>();;
     for (int[] sel : selections) {
 
       //Finished when we add a player with the last choice from each PossibleUnit
@@ -86,9 +86,8 @@ public class PossiblePlayers {
         }
 
         //Create copies of required units
-        units = new Unit[unitsPerPlayer];
         for (int i = 0; i < unitsPerPlayer; i++) {
-          units[i] = remainingStandingForces.get(sel[i]).getUnit(pointers[i]).copyUnit();
+          units.add(remainingStandingForces.get(sel[i]).getUnit(pointers[i]).copyUnit());
         }
         possiblePlayers.add(new Player(units));
 

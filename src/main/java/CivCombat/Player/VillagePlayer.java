@@ -10,7 +10,9 @@ import CivCombat.Unit.InfantryUnit;
 import CivCombat.Unit.MountedUnit;
 import CivCombat.Unit.Unit;
 
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * A random player representing a barbarian village. Has a level 1 unit of each non-aircraft type.
@@ -18,16 +20,20 @@ import java.util.Random;
 public class VillagePlayer extends Player {
 
   public VillagePlayer() {
-    units = new Unit[3];
+    super(generateUnits());
+  }
+
+  private static Set<Unit> generateUnits() {
+    Set<Unit> units = new LinkedHashSet<>();
     Random randomNumber = new Random();
     int n = randomNumber.nextInt(3) + 1;
-    units[0] = new InfantryUnit(1, n, 4 - n);
+    units.add(new InfantryUnit(1, n, 4 - n));
 
     n = randomNumber.nextInt(3) + 1;
-    units[1] = new MountedUnit(1, n, 4 - n);
+    units.add(new MountedUnit(1, n, 4 - n));
 
     n = randomNumber.nextInt(3) + 1;
-    units[2] = new ArtilleryUnit(1, n, 4 - n);
-
+    units.add(new ArtilleryUnit(1, n, 4 - n));
+    return units;
   }
 }
