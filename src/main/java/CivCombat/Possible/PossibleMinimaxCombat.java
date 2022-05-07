@@ -78,7 +78,7 @@ public class PossibleMinimaxCombat {
   public PlayerAction getBestAction() {
     PlayerAction bestAction;
 
-    bestAction = b.defaultAction(defenderTurn);
+    bestAction = b.anyAction(defenderTurn);
     int bestValue = 0;
     for (Entry<PlayerAction, Integer> e : actionEvaluations.entrySet()) {
       if (e.getValue() > bestValue) {

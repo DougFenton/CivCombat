@@ -5,56 +5,59 @@
  */
 package CivCombat.Player;
 
+import CivCombat.BattlePosition;
+import CivCombat.Unit.Unit;
+
+import java.util.Objects;
+import java.util.Optional;
+
 /**
- * Represents playing a unit from a given hand position to a given board position.
+ * Represents playing a unit from hand to a given battle position, or to a new flank if `battlePosition` is empty.
  */
-public class PlayerAction {
+public final class PlayerAction {
+  private final Unit unitPlayed;
+  private final Optional<BattlePosition> battlePosition;
+  private final boolean isAttacker;
 
-  private final int handPosition;
-  private final int battlePosition;
-
-  public PlayerAction(int handPosition, int battlePosition) {
-    this.handPosition = handPosition;
+  public PlayerAction(Unit unitPlayed, Optional<BattlePosition> battlePosition, boolean isAttacker) {
+    this.unitPlayed = unitPlayed;
     this.battlePosition = battlePosition;
+    this.isAttacker = isAttacker;
   }
 
-  public int getHandPosition() {
-    return handPosition;
+  public Unit unitPlayed() {
+    return unitPlayed;
   }
 
-  public int getBattlePosition() {
+  public Optional<BattlePosition> battlePosition() {
     return battlePosition;
   }
 
-  public void printPlayerAction() {
-    System.out.println("Play unit " + handPosition + " at position " + battlePosition);
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 17 * hash + this.handPosition;
-    hash = 17 * hash + this.battlePosition;
-    return hash;
+  public boolean isAttacker() {
+    return isAttacker;
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final PlayerAction other = (PlayerAction) obj;
-    if (this.handPosition != other.handPosition) {
-      return false;
-    }
-    return this.battlePosition == other.battlePosition;
+    if (obj == this) return true;
+    if (obj == null || obj.getClass() != this.getClass()) return false;
+    var that = (PlayerAction) obj;
+    return Objects.equals(this.unitPlayed, that.unitPlayed) &&
+        Objects.equals(this.battlePosition, that.battlePosition) &&
+        this.isAttacker == that.isAttacker;
   }
 
+  @Override
+  public int hashCode() {
+    return Objects.hash(unitPlayed, battlePosition, isAttacker);
+  }
+
+  @Override
+  public String toString() {
+    return "PlayerAction[" +
+        "unitPlayed=" + unitPlayed + ", " +
+        "battlePosition=" + battlePosition + ", " +
+        "isAttacker=" + isAttacker + ']';
+  }
 
 }

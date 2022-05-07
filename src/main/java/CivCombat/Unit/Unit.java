@@ -44,7 +44,7 @@ public abstract class Unit {
     this.wounds = original.wounds;
   }
 
-  public abstract Unit copyUnit();
+  public abstract Unit copy();
 
   public abstract boolean trumps(Unit unit);
 
@@ -99,5 +99,16 @@ public abstract class Unit {
   @Override
   public int hashCode() {
     return Objects.hash(level, type, attack, health, wounds);
+  }
+
+  @Override
+  public String toString() {
+    return "Unit{" +
+        "level=" + level +
+        ", type=" + type +
+        ", attack=" + attack +
+        ", health=" + health +
+        ", wounds=" + wounds +
+        '}';
   }
 }

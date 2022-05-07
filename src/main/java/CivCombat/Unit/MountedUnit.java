@@ -25,7 +25,7 @@ public class MountedUnit extends Unit {
   }
 
   @Override
-  public Unit copyUnit() {
+  public Unit copy() {
     return new MountedUnit(this);
   }
 

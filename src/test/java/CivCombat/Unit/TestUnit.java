@@ -84,4 +84,12 @@ public class TestUnit {
     assertThrows(UnitIsDeadException.class, unit::removeWounds);
     assertThrows(UnitIsDeadException.class, () -> unit.removeWounds(2));
   }
+
+  @Test
+  public void testCopy() {
+    InfantryUnit unit = new InfantryUnit(1, 1, 3);
+
+    assertEquals(unit, unit.copy());
+    assertNotSame(unit, unit.copy());
+  }
 }

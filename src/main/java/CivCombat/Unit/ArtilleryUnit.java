@@ -24,7 +24,7 @@ public class ArtilleryUnit extends Unit {
   }
 
   @Override
-  public Unit copyUnit() {
+  public Unit copy() {
     return new ArtilleryUnit(this);
   }
 

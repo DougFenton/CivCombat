@@ -24,7 +24,7 @@ public class AircraftUnit extends Unit {
   }
 
   @Override
-  public Unit copyUnit() {
+  public Unit copy() {
     return new AircraftUnit(this);
   }
 

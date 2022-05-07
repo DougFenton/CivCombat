@@ -7,7 +7,8 @@ package CivCombat;
 
 import CivCombat.Player.PlayerAction;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -15,113 +16,112 @@ import java.util.Set;
  */
 public class MinimaxCombat {
 
-  protected Battlefield b;
+  protected Battlefield battlefield;
 
-  public MinimaxCombat(Battlefield b) {
-    this.b = b;
+  public MinimaxCombat(Battlefield battlefield) {
+    this.battlefield = battlefield;
   }
 
-  //maxValue represents a defender turn
-  protected Decision maxValue(Battlefield b) {
-        /* function Max-Value(s) returns a utility value -
-        false for attacker win, true for defender win */
-
-
-    //If battle is finished, returns false for attacker win
-    if (b.allUnitsPlayed()) {
-      return new Decision(b.determineWinner(), null);
+  /**
+   * Returns the utility value of the game state, given that it is the defender's turn, and an action.
+   * The action will be a winning action if there is one, or any action if there isn't.
+   * If no actions are available, the action will be null.
+   *
+   * @return false for an attacker win, true for a defender win.
+   */
+  protected ActionAndResult maxValue(Battlefield battlefield) {
+    //If battle is finished, calculate result.
+    if (battlefield.allUnitsPlayed()) {
+      return new ActionAndResult(null, battlefield.determineWinner());
     }
 
     //If defender cannot play, move to attacker turn
-    if (b.getDefenderHandSize() == 0) {
-      return minValue(b);
+    if (battlefield.getDefenderOptions().isEmpty()) {
+      return minValue(battlefield);
     }
 
     //Calculate if there is a winning play
     boolean value = false;
-
-    //Find default move in case no winning play available
-    PlayerAction bestAction = b.defaultAction(true);
+    Optional<PlayerAction> winningAction = Optional.empty();
 
     //For each move we can take
-    for (PlayerAction a : b.possibleActions(true)) {
+    for (PlayerAction action : battlefield.getDefenderOptions()) {
       //If we haven't already found a winning move
       if (!value) {
         //Check if playing a unit there wins
-        Decision checkMove = minValue(b.result(true, a));
+        ActionAndResult checkMove = minValue(battlefield.result(action));
         //If it does
         if (checkMove.result()) {
           value = true;
           //Remember it
-          bestAction = a;
+          winningAction = Optional.of(action);
         }
       }
     }
-    return new Decision(value, bestAction);
+    return new ActionAndResult(winningAction.orElse(battlefield.anyAction(true)), value);
   }
 
-  //minValue represents an attacker turn
-  protected Decision minValue(Battlefield b) {
-        /* function Min-Value(s) returns a utility value -
-        false for attacker win, true for defender win   */
-
-    //If battle is finished, returns false for attacker win
-    if (b.allUnitsPlayed()) {
-      return new Decision(b.determineWinner(), null);
+  /**
+   * Returns the utility value of the game state, given that it is the attacker's turn, and an action.
+   * The action will be a winning action if there is one, or any action if there isn't.
+   * If no actions are available, the action will be null.
+   *
+   * @return false for an attacker win, true for a defender win.
+   */
+  protected ActionAndResult minValue(Battlefield battlefield) {
+    //If battle is finished, calculate result.
+    if (battlefield.allUnitsPlayed()) {
+      return new ActionAndResult(null, battlefield.determineWinner());
     }
 
     //If attacker cannot play, move to defender turn
-    if (b.getAttackerHandSize() == 0) {
-      return maxValue(b);
+    if (battlefield.getAttackerOptions().isEmpty()) {
+      return maxValue(battlefield);
     }
 
     //Calculate if there is a winning play
     boolean value = true;
-
-    //Find default move in case no winning play available
-    PlayerAction bestAction = b.defaultAction(false);
+    Optional<PlayerAction> winningAction = Optional.empty();
 
     //For each move we can take
-    for (PlayerAction a : b.possibleActions(false)) {
-
+    for (PlayerAction action : battlefield.getAttackerOptions()) {
       //If we haven't found a winning move
       if (value) {
         //Check if playing a unit there wins
-        Decision checkMove = maxValue(b.result(false, a));
+        ActionAndResult checkMove = maxValue(battlefield.result(action));
         //If it does
         if (!checkMove.result()) {
           value = false;
           //Remember it
-          bestAction = a;
+          winningAction = Optional.of(action);
         }
       }
     }
 
-    return new Decision(value, bestAction);
+    return new ActionAndResult(winningAction.orElse(battlefield.anyAction(false)), value);
   }
 
-  public Decision determineWinner(boolean defenderTurn) {
-    if (defenderTurn) {
-      return maxValue(b);
-    } else {
-      return minValue(b);
-    }
+  public ActionAndResult determineWinner(boolean defenderTurn) {
+    return defenderTurn ? maxValue(battlefield) : minValue(battlefield);
   }
 
+  /**
+   * @return The set of actions which win with optimal play. Expensive to calculate.
+   */
   public Set<PlayerAction> winningMoves(boolean defenderTurn) {
-    Set<PlayerAction> moves = new HashSet<>();
+    Set<PlayerAction> moves = new LinkedHashSet<>();
     if (defenderTurn) {
-      for (PlayerAction a : b.possibleActions(defenderTurn)) {
+      for (PlayerAction action : battlefield.getDefenderOptions()) {
         //minValue is false if attacker can win, true otherwise
-        if (minValue(b.result(defenderTurn, a)).result()) {
-          moves.add(a);
+        if (minValue(battlefield.result(action)).result()) {
+          moves.add(action);
         }
       }
     } else {
-      for (PlayerAction a : b.possibleActions(defenderTurn)) {
+      for (PlayerAction action : battlefield.getAttackerOptions()) {
         //maxValue is true if defender can win, false otherwise
-        if (!maxValue(b.result(defenderTurn, a)).result()) {
-          moves.add(a);
+        if (!maxValue(battlefield.result(action)).result()) {
+          moves.add(action);
         }
       }
     }
