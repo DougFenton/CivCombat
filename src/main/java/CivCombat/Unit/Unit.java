@@ -7,6 +7,7 @@ package CivCombat.Unit;
 
 import java.util.Objects;
 
+import static CivCombat.Unit.UnitType.AIRCRAFT;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -24,6 +25,10 @@ public abstract class Unit {
   private int wounds;
 
   public Unit(UnitType type, int level, int attack, int health) {
+    if (type == AIRCRAFT && level != 4) {
+      throw new IllegalArgumentException("Aircraft must be level 4");
+    }
+
     // Aircraft have a total of 2 more attack + health.
     int aircraftAdjustment = type == UnitType.AIRCRAFT ? 2 : 0;
     if (attack + health != level * 2 + 2 + aircraftAdjustment) {

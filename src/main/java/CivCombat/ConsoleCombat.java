@@ -10,13 +10,19 @@ import CivCombat.Player.PlayerAction;
 import CivCombat.Player.VillagePlayer;
 import CivCombat.Possible.PossibleMinimaxCombat;
 import CivCombat.Possible.PossiblePlayers;
+import CivCombat.Possible.PossiblePlayersWithPlayedUnits;
 import CivCombat.Possible.PossibleUnit;
 import CivCombat.Unit.ArtilleryUnit;
 import CivCombat.Unit.InfantryUnit;
 import CivCombat.Unit.MountedUnit;
 import CivCombat.Unit.Unit;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
+
+import static CivCombat.Unit.UnitType.*;
 
 /**
  * A console interface for simulating combats.
@@ -31,7 +37,7 @@ public class ConsoleCombat {
   }
 
   public static Player getSampleAttacker() {
-    Set<Unit> units = new LinkedHashSet<>();
+    List<Unit> units = new ArrayList<>();
     units.add(new InfantryUnit(1, 2, 2));
     units.add(new MountedUnit(1, 2, 2));
     units.add(new ArtilleryUnit(1, 1, 3));
@@ -39,7 +45,7 @@ public class ConsoleCombat {
   }
 
   public static Player getSampleDefender() {
-    Set<Unit> units = new LinkedHashSet<>();
+    List<Unit> units = new ArrayList<>();
     units.add(new InfantryUnit(1, 1, 3));
     units.add(new MountedUnit(1, 2, 2));
     units.add(new ArtilleryUnit(1, 3, 1));
@@ -156,17 +162,17 @@ public class ConsoleCombat {
     List<Unit> playedDefenderUnits = new ArrayList<>();
 
     List<PossibleUnit> possibleAttackerUnits = new ArrayList<>();
-    possibleAttackerUnits.add(new PossibleUnit("Infantry", 1));
-    possibleAttackerUnits.add(new PossibleUnit("Mounted", 1));
-    possibleAttackerUnits.add(new PossibleUnit("Artillery", 1));
+    possibleAttackerUnits.add(new PossibleUnit(INFANTRY, 1));
+    possibleAttackerUnits.add(new PossibleUnit(MOUNTED, 1));
+    possibleAttackerUnits.add(new PossibleUnit(ARTILLERY, 1));
 
     List<PossibleUnit> possibleDefenderUnits = new ArrayList<>();
-    possibleDefenderUnits.add(new PossibleUnit("Infantry", 1));
-    possibleDefenderUnits.add(new PossibleUnit("Mounted", 1));
-    possibleDefenderUnits.add(new PossibleUnit("Artillery", 1));
+    possibleDefenderUnits.add(new PossibleUnit(INFANTRY, 1));
+    possibleDefenderUnits.add(new PossibleUnit(MOUNTED, 1));
+    possibleDefenderUnits.add(new PossibleUnit(ARTILLERY, 1));
 
-    PossiblePlayers attackers = new PossiblePlayers(playedAttackerUnits, possibleAttackerUnits, 3);
-    PossiblePlayers defenders = new PossiblePlayers(playedDefenderUnits, possibleDefenderUnits, 3);
+    PossiblePlayers attackers = new PossiblePlayersWithPlayedUnits(playedAttackerUnits, possibleAttackerUnits, 3);
+    PossiblePlayers defenders = new PossiblePlayersWithPlayedUnits(playedDefenderUnits, possibleDefenderUnits, 3);
     PossibleMinimaxCombat minimax = new PossibleMinimaxCombat(attacker, defenders, battlefield, true);
   }
 
@@ -174,9 +180,9 @@ public class ConsoleCombat {
     List<Unit> playedAttackerUnits = new ArrayList<>();
 
     List<PossibleUnit> possibleAttackerUnits = new ArrayList<>();
-    possibleAttackerUnits.add(new PossibleUnit("Infantry", 1));
-    possibleAttackerUnits.add(new PossibleUnit("Mounted", 1));
-    possibleAttackerUnits.add(new PossibleUnit("Artillery", 1));
+    possibleAttackerUnits.add(new PossibleUnit(INFANTRY, 1));
+    possibleAttackerUnits.add(new PossibleUnit(MOUNTED, 1));
+    possibleAttackerUnits.add(new PossibleUnit(ARTILLERY, 1));
 
     Scanner scanner = new Scanner(System.in);
     int handPos;
@@ -188,7 +194,7 @@ public class ConsoleCombat {
     Pair<Integer, Integer> actionEvaluation;
 
     while (!battlefield.allUnitsPlayed()) {
-      attackers = new PossiblePlayers(playedAttackerUnits, possibleAttackerUnits, 3);
+      attackers = new PossiblePlayersWithPlayedUnits(playedAttackerUnits, possibleAttackerUnits, 3);
       minimax = new PossibleMinimaxCombat(defender, attackers, battlefield, true);
       bestAction = minimax.getBestAction();
       actionEvaluation = minimax.getActionEvaluation(bestAction);

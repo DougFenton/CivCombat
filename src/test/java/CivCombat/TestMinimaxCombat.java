@@ -14,8 +14,8 @@ public class TestMinimaxCombat {
 
   @Test
   public void testAllUnitsPlayed() {
-    Player attacker = new Player(Collections.emptySet());
-    Player defender = new Player(Collections.emptySet());
+    Player attacker = new Player(Collections.emptyList());
+    Player defender = new Player(Collections.emptyList());
     Battlefield battlefield = new Battlefield(attacker, defender);
     MinimaxCombat minimaxCombat = new MinimaxCombat(battlefield);
 
@@ -28,7 +28,7 @@ public class TestMinimaxCombat {
   @Test
   public void testOnlyAttackerUnits() {
     Player attacker = ConsoleCombat.getSampleAttacker();
-    Player defender = new Player(Collections.emptySet());
+    Player defender = new Player(Collections.emptyList());
     Battlefield battlefield = new Battlefield(attacker, defender);
     MinimaxCombat minimaxCombat = new MinimaxCombat(battlefield);
 
@@ -41,7 +41,7 @@ public class TestMinimaxCombat {
 
   @Test
   public void testOnlyDefenderUnits() {
-    Player attacker = new Player(Collections.emptySet());
+    Player attacker = new Player(Collections.emptyList());
     Player defender = ConsoleCombat.getSampleDefender();
     Battlefield battlefield = new Battlefield(attacker, defender);
     MinimaxCombat minimaxCombat = new MinimaxCombat(battlefield);

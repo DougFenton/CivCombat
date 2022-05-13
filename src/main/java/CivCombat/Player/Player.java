@@ -10,15 +10,15 @@ import CivCombat.Unit.Unit;
 import CivCombat.Unit.UnitConsolePrinter;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 /**
  * Represents either the attacker or defender in a single combat.
  */
 public class Player {
-  protected Set<Unit> units;
+  protected List<Unit> units;
 
-  public Player(Set<Unit> units) {
+  public Player(List<Unit> units) {
     this.units = units;
   }
 
@@ -34,4 +34,15 @@ public class Player {
     System.out.println();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Player player)) return false;
+    return Objects.equals(units, player.units);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(units);
+  }
 }

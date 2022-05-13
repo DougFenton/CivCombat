@@ -10,67 +10,82 @@ import CivCombat.Unit.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static CivCombat.Unit.UnitType.AIRCRAFT;
+
 /**
  * The possible units for a given type and level.
  */
 public class PossibleUnit {
 
-  private final String unitType;
-  private final int unitLevel;
+  private final UnitType type;
+  private final int level;
+
   private List<Unit> possibleUnits;
 
-  public PossibleUnit(String unitType, int unitLevel) {
-    /* Type is one of: "Infantry", "Mounted", "Artillery", "Aircraft" */
-    this.unitType = unitType;
-    /* Level is one of: 1,2,3,4 */
-    this.unitLevel = unitLevel;
-
-    generateUnits();
+  public PossibleUnit(UnitType type, int level) {
+    if (type == AIRCRAFT && level != 4) {
+      throw new IllegalArgumentException("Aircraft must be level 4");
+    }
+    this.type = type;
+    this.level = level;
+    possibleUnits = generateUnits(type, level);
   }
 
   public PossibleUnit(PossibleUnit p) {
-    this.unitType = p.unitType;
-    this.unitLevel = p.unitLevel;
-    generateUnits();
+    type = p.type;
+    level = p.level;
+    possibleUnits = generateUnits(type, level);
   }
 
   public PossibleUnit copy() {
     return new PossibleUnit(this);
   }
 
-  private void generateUnits() {
-    if ("Aircraft".equals(unitType) && unitLevel != 4) {
-      throw new IllegalArgumentException("Aircraft level is not 4");
-    }
+  private List<Unit> generateUnits(UnitType type, int level) {
     possibleUnits = new ArrayList<>();
-    if ("Infantry".equals(unitType)) {
-      for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new InfantryUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
+    switch (type) {
+      case INFANTRY -> {
+        for (int i = 0; i < 3; i++) {
+          possibleUnits.add(new InfantryUnit(level, level + i, level + 2 - i));
+        }
       }
-    } else if ("Mounted".equals(unitType)) {
-      for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new MountedUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
+      case MOUNTED -> {
+        for (int i = 0; i < 3; i++) {
+          possibleUnits.add(new MountedUnit(level, level + i, level + 2 - i));
+        }
       }
-    } else if ("Artillery".equals(unitType)) {
-      for (int i = 0; i < 3; i++) {
-        possibleUnits.add(new ArtilleryUnit(unitLevel, unitLevel + i, unitLevel + 2 - i));
+      case ARTILLERY -> {
+        for (int i = 0; i < 3; i++) {
+          possibleUnits.add(new ArtilleryUnit(level, level + i, level + 2 - i));
+        }
       }
-    } else {
-      for (int i = 0; i < 4; i++) {
-        possibleUnits.add(new AircraftUnit(unitLevel + i, unitLevel + 2 - i));
+      case AIRCRAFT -> {
+        for (int i = 0; i < 3; i++) {
+          // Aircraft are one of each stat stronger.
+          possibleUnits.add(new AircraftUnit(level + i + 1, level + 2 - i + 1));
+        }
       }
     }
+    return possibleUnits;
   }
 
-  public String getUnitType() {
-    return unitType;
+  public UnitType getType() {
+    return type;
   }
 
-  public int numberPossible() {
+  public List<Unit> getPossibleUnits() {
+    return possibleUnits;
+  }
+
+  public int getNumberPossible() {
     return possibleUnits.size();
   }
 
-  public Unit getUnit(int i) {
-    return possibleUnits.get(i);
+  /**
+   * @return true if the given unit could be one of these represented by this PossibleUnit.
+   */
+  public boolean matches(Unit unit) {
+    return type == unit.getUnitType() && level == unit.getLevel();
   }
+
 }
