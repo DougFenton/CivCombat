@@ -13,16 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class TestPossiblePlayersWithStandingForces {
 
-  private static final int SIX_CHOOSE_FOUR = 15;
-  private static final int SIXTEEN_CHOOSE_EIGHT = 12870;
-
   @Test
   public void testPicksRightNumberOfUnits() {
     PossiblePlayersWithStandingForces possiblePlayersWithStandingForces = new PossiblePlayersWithStandingForces(sixUnits(), 4);
     for (Player player : possiblePlayersWithStandingForces.getPlayers()) {
       assertEquals(4, player.getUnitsList().size());
     }
-    assertEquals(SIX_CHOOSE_FOUR * unitPossibilities(4), possiblePlayersWithStandingForces.getNumberOfPlayers());
+    int distinctPlayers = 8; // Of the 6C4=15 players, only 8 turn out to have distinct units.
+    assertEquals(distinctPlayers * unitPossibilities(4), possiblePlayersWithStandingForces.getNumberOfPlayers());
   }
 
   @Test
@@ -37,7 +35,9 @@ public class TestPossiblePlayersWithStandingForces {
     for (Player player : possiblePlayersWithStandingForces.getPlayers()) {
       assertEquals(8, player.getUnitsList().size());
     }
-    assertEquals(SIXTEEN_CHOOSE_EIGHT * unitPossibilities(8), possiblePlayersWithStandingForces.getNumberOfPlayers());
+
+    int distinctPlayers = 72; // Of the 16C8=12870 players, only 72 turn out to have distinct units.
+    assertEquals(distinctPlayers * unitPossibilities(8), possiblePlayersWithStandingForces.getNumberOfPlayers());
   }
 
   private int unitPossibilities(int numberOfUnits) {

@@ -1,7 +1,6 @@
 package CivCombat.Possible;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -20,8 +19,11 @@ public class PossiblePlayersWithStandingForces extends PossiblePlayers {
     // Sets of $battleHandSize possible units from those remaining.
     List<List<PossibleUnit>> sublistsOfSize = sublistsOfSize(standingForces, battleHandSize);
 
-    // Convert to set and back to remove duplicates
-    return new LinkedHashSet<>(sublistsOfSize).stream().toList();
+    // Order units and remove duplicate players (same combination of possible units).
+    return sublistsOfSize.stream()
+        .map(possibleUnits -> possibleUnits.stream().sorted().toList())
+        .distinct()
+        .toList();
   }
 
   /**

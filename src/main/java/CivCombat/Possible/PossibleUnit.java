@@ -16,12 +16,12 @@ import static CivCombat.Unit.UnitType.AIRCRAFT;
 /**
  * The possible units for a given type and level.
  */
-public class PossibleUnit {
+public class PossibleUnit implements Comparable<PossibleUnit> {
 
   private final UnitType type;
   private final int level;
 
-  private List<Unit> possibleUnits; //TODO: Don't generate until needed.
+  private List<Unit> possibleUnits;
 
   public PossibleUnit(UnitType type, int level) {
     if (type == AIRCRAFT && level != 4) {
@@ -29,21 +29,17 @@ public class PossibleUnit {
     }
     this.type = type;
     this.level = level;
-    possibleUnits = generateUnits(type, level);
+    possibleUnits = null;
   }
 
   public PossibleUnit(PossibleUnit p) {
     type = p.type;
     level = p.level;
-    possibleUnits = generateUnits(type, level);
+    possibleUnits = null;
   }
 
-  public PossibleUnit copy() {
-    return new PossibleUnit(this);
-  }
-
-  private List<Unit> generateUnits(UnitType type, int level) {
-    possibleUnits = new ArrayList<>();
+  private static List<Unit> generateUnits(UnitType type, int level) {
+    List<Unit> possibleUnits = new ArrayList<>();
     switch (type) {
       case INFANTRY -> {
         for (int i = 0; i < 3; i++) {
@@ -70,11 +66,25 @@ public class PossibleUnit {
     return possibleUnits;
   }
 
+  private static int orderValue(PossibleUnit possibleUnit) {
+    int result = 1;
+    result = 31 * result + possibleUnit.type.ordinal();
+    result = 31 * result + possibleUnit.level;
+    return result;
+  }
+
+  public PossibleUnit copy() {
+    return new PossibleUnit(this);
+  }
+
   public UnitType getType() {
     return type;
   }
 
   public List<Unit> getPossibleUnits() {
+    if (possibleUnits == null) {
+      possibleUnits = generateUnits(type, level);
+    }
     return possibleUnits;
   }
 
@@ -82,14 +92,14 @@ public class PossibleUnit {
     return possibleUnits.size();
   }
 
+  // Equals and hashcode ignore possibleUnits, as that should be determined by the level and type.
+
   /**
    * @return true if the given unit could be one of these represented by this PossibleUnit.
    */
   public boolean matches(Unit unit) {
     return type == unit.getUnitType() && level == unit.getLevel();
   }
-
-  // Equals and hashcode ignore possibleUnits, as that should be determined by the level and type.
 
   @Override
   public boolean equals(Object o) {
@@ -102,5 +112,10 @@ public class PossibleUnit {
   @Override
   public int hashCode() {
     return Objects.hash(type, level);
+  }
+
+  @Override
+  public int compareTo(PossibleUnit other) {
+    return Integer.compare(orderValue(this), orderValue(other));
   }
 }
