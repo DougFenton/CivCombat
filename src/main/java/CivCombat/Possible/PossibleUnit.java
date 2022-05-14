@@ -9,6 +9,7 @@ import CivCombat.Unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static CivCombat.Unit.UnitType.AIRCRAFT;
 
@@ -20,7 +21,7 @@ public class PossibleUnit {
   private final UnitType type;
   private final int level;
 
-  private List<Unit> possibleUnits;
+  private List<Unit> possibleUnits; //TODO: Don't generate until needed.
 
   public PossibleUnit(UnitType type, int level) {
     if (type == AIRCRAFT && level != 4) {
@@ -88,4 +89,18 @@ public class PossibleUnit {
     return type == unit.getUnitType() && level == unit.getLevel();
   }
 
+  // Equals and hashcode ignore possibleUnits, as that should be determined by the level and type.
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PossibleUnit that = (PossibleUnit) o;
+    return level == that.level && type == that.type;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, level);
+  }
 }
